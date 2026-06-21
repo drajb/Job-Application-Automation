@@ -1,0 +1,81 @@
+# --- secrets and credentials (NEVER COMMIT) ---
+secrets/
+secrets/**
+!secrets/.gitkeep
+*.age
+*.age.key
+.env
+.env.local
+.envrc
+
+# --- profile (encrypted variant only lives in secrets/) ---
+profile.yaml
+profile.yml
+
+# --- databases ---
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# --- browser profile (cookies, history, fingerprint surface) ---
+chrome-profile-apply/
+playwright-browsers/
+
+# --- resumes (your private CV) ---
+# We track resumes/.gitkeep and resumes/master/Resume_example.md (the worked
+# example). Anything else under resumes/ is ignored — that's where your real
+# CVs go.
+resumes/*
+!resumes/.gitkeep
+!resumes/master/
+resumes/master/*
+!resumes/master/Resume_example.md
+
+# --- tailored output (per-application UUID-stamped PDFs) ---
+data/tailored/
+data/screenshots/
+data/raw/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# --- node (for any tooling) ---
+node_modules/
+
+# --- editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- logs ---
+*.log
+logs/
+
+# --- alembic ---
+src/db/migrations/versions/__pycache__/
+
+# --- backup artifacts ---
+*.tar.gz
+backups/

@@ -1,0 +1,30 @@
+name: New ATS adapter request
+description: Request support for an ATS not currently in Tier-1.
+labels: [ats, enhancement]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: ATS name
+      placeholder: "e.g. Workday, iCIMS, Taleo, Recruitee, Jobvite, ..."
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Example public posting URL
+      description: A URL we can hit during development.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Known quirks
+      description: Anything unusual about this ATS — multi-page flows, account requirements, captcha behaviour.
+  - type: checkboxes
+    id: tier
+    attributes:
+      label: Suggested tier
+      options:
+        - label: Tier-1 (deterministic Playwright) — preferred when the DOM is stable
+        - label: Tier-2 (vision-driven) — best when DOM is chaotic

@@ -1,0 +1,74 @@
+name: Bug report
+description: Something doesn't work the way the docs say it should.
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Do not paste real credentials, tokens, or your full resume into this issue.** Redact aggressively.
+  - type: input
+    id: version
+    attributes:
+      label: Commit SHA or version
+      placeholder: "e.g. 89d8b4c or v0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - WSL2 Ubuntu on Windows
+        - Native Ubuntu / Debian
+        - Native Fedora / RHEL
+        - macOS (untested but tolerated)
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Which subsystem?
+      options:
+        - Resume tailor / validator
+        - Resume renderer (LibreOffice)
+        - ATS adapter (Tier 1)
+        - Tier-2 vision loop
+        - Telegram bot
+        - IMAP listener / email classifier
+        - Vault / signup
+        - Scheduler / digest
+        - LinkedIn
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Exact commands and inputs.
+      placeholder: |
+        1. `make migrate`
+        2. From Telegram, `/apply https://...`
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: Include the relevant log lines.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste the last 50 lines of relevant log output. **Redact credentials.**
+      render: text
