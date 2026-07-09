@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: no-committed-secrets
+        name: Reject committed secrets (API keys / age keys / tokens)
+        # Universal secret shapes — an age private key, a Google API key, a
+        # Telegram bot token, or a PEM private-key header should never be
+        # committed. The detect-private-key hook above covers PEM; this adds
+        # the service-specific shapes this project uses.
+        entry: bash -c 'grep -rEn --exclude-dir=.git --exclude-dir=.venv --exclude-dir=__pycache__ --exclude-dir=secrets "(AGE-SECRET-KEY-1[0-9A-Z]{20,}|AIza[0-9A-Za-z_-]{35}|[0-9]{8,10}:[A-Za-z0-9_-]{35})" . && echo "Secret-shaped string found above — do not commit." && exit 1 || exit 0'
+        language: system
+        pass_filenames: false

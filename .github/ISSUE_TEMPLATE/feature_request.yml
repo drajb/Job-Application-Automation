@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest a feature, prompt improvement, or pre-flight check.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you solving?
+      description: Describe the actual user pain — not the feature shape.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: Make sure this isn't already a locked decision.
+      options:
+        - label: I have read [docs/SPEC.md §9](../docs/SPEC.md) and this proposal does not contradict it (or it's a proposed amendment).
+          required: true
+        - label: This is not a request to add OpenAI, Anthropic, or any other paid LLM (locked: Gemini only).
+          required: true
+        - label: This is not a request to automate LinkedIn Easy Apply (locked: Tier-3 only).
+          required: true

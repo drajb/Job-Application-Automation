@@ -1,0 +1,21 @@
+# Normalize line endings to LF for all text files. Keeps Windows checkouts
+# from polluting commits with CRLF noise.
+* text=auto eol=lf
+
+# Explicit overrides
+*.py text eol=lf diff=python
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.sh text eol=lf
+Makefile text eol=lf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
+*.db binary
+*.age binary

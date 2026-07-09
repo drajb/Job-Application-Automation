@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends age libreoffice
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          # CPU-only torch to keep CI fast (sentence-transformers needs torch).
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install -e ".[dev]"
+
+      - name: Install Playwright browsers
+        run: python -m playwright install --with-deps chromium
+
+      - name: Lint
+        run: python -m ruff check src tests scripts
+
+      - name: Test
+        run: python -m pytest --cov=src --cov-report=term-missing
+
+      - name: Upload coverage
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage
+          if-no-files-found: ignore
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install audit tools
+        run: |
+          pip install pip-audit
+
+      - name: pip-audit
+        run: pip-audit --skip-editable || echo "audit issues found — review"
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify no committed secrets
+        run: |
+          set -e
+          # Universal secret shapes — an age private key, a Google API key, or
+          # a Telegram bot token must never land in the repo. These patterns
+          # name no person; they're credential formats this project handles.
+          if grep -rEn \
+              --exclude-dir=.git --exclude-dir=.venv --exclude-dir=__pycache__ \
+              --exclude-dir=secrets \
+              '(AGE-SECRET-KEY-1[0-9A-Z]{20,}|AIza[0-9A-Za-z_-]{35}|[0-9]{8,10}:[A-Za-z0-9_-]{35})' \
+              . ; then
+              echo "::error::secret-shaped string detected in tree — see output above"
+              exit 1
+          fi
+          echo "ok: no committed secrets"
+
+      - name: Verify gitignore covers secrets
+        run: |
+          for pat in 'secrets/' '*.age.key' '*.db' '.env' 'chrome-profile-apply/' 'data/tailored/' 'profile.yaml'; do
+            if ! grep -qF "$pat" .gitignore; then
+              echo "::error::.gitignore missing pattern: $pat"
+              exit 1
+            fi
+          done
+          echo "ok: gitignore covers all secret patterns"
