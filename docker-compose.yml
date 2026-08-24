@@ -1,0 +1,19 @@
+services:
+  apply-agent:
+    build: .
+    image: apply-agent:latest
+    container_name: apply-agent
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # secrets and persistent data
+      - ./secrets:/app/secrets
+      - ./resumes:/app/resumes:ro
+      - ./data:/app/data
+      - ./apply_agent.db:/app/apply_agent.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
