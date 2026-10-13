@@ -1,0 +1,52 @@
+# Keep secrets, personal data and local state OUT of the image. Everything
+# below is mounted at runtime (see docker-compose.yml) instead.
+.git
+.github
+.venv
+venv
+env
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+dist
+build
+*.egg-info
+
+# secrets + credentials
+secrets
+.env
+.env.*
+!.env.example
+*.age
+*.age.key
+profile.yaml
+profile.yml
+
+# local state
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+chrome-profile-apply
+playwright-browsers
+data/tailored
+data/screenshots
+data/raw
+backups
+logs
+*.log
+*.tar.gz
+
+# your resumes are mounted, never baked in (the worked example stays)
+resumes/*
+!resumes/.gitkeep
+!resumes/master
+resumes/master/*
+!resumes/master/Resume_example.md
+
+# private working notes
+docs/BLUEPRINT_FOR_OPUS.md

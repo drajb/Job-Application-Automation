@@ -1,0 +1,79 @@
+# profile.example.yaml — template for your personal profile.
+#
+# Usage:
+#   cp profile.example.yaml secrets/profile.yaml
+#   $EDITOR secrets/profile.yaml
+#   make encrypt-profile   # encrypts to .age, deletes plaintext
+#
+# NEVER commit secrets/profile.yaml. It's gitignored for a reason.
+#
+# Every field maps to a real ATS form field. The truthful values you put here
+# are the only facts the agent is allowed to mention on a resume or in an
+# essay — the resume validator enforces this.
+
+identity:
+  legal_name: "Jane Doe"                   # as it should appear on the resume
+  preferred_name: "Jane"                   # what the agent uses in greetings
+  email: "jane.doe@example.com"            # the email the agent will use on every form
+  phone: "+1-555-555-0100"
+  location:
+    city: "Springfield"
+    state: "IL"
+    country: "US"
+  linkedin: "https://www.linkedin.com/in/your-handle"
+  github: "https://github.com/your-handle"
+  portfolio: "https://your-portfolio.example"
+
+work_authorization:
+  authorized_us: true
+  requires_sponsorship: false              # set true if you're on H1B/L1/F1 OPT, etc.
+  current_status: "Citizen"                # USC | GC | H1B | L1 | OPT | TN | etc.
+  visa_expiration: null                    # ISO date or null
+  i140_approved: false
+
+demographics:
+  # Every field is optional. The agent uses these only for the optional EEOC
+  # questions on application forms. Leave any field as null to mean
+  # "prefer not to disclose".
+  gender: null                             # "Male" | "Female" | "Non-binary" | null
+  race: null                               # "Asian" | "Black or African American" | "Hispanic or Latino" | "White" | "Two or more races" | "Prefer not to say" | null
+  hispanic_latino: null                    # true | false | null
+  veteran: false
+  disability: "prefer_not_to_say"          # "yes" | "no" | "prefer_not_to_say"
+  pronouns: null                           # "she/her" | "he/him" | "they/them" | null
+
+compensation:
+  desired_base_min: 150000                 # USD. Used as the salary-floor pre-flight check.
+  desired_base_target: 180000              # The number the agent quotes on forms.
+  notice_period_weeks: 2
+  open_to_relocate: false                  # bool or a free-text string ("only Bay Area")
+  open_to_remote: true
+  open_to_hybrid: true
+  open_to_onsite: true
+  earliest_start: null                     # ISO date, free text ("flexible"), or null
+
+background:
+  felony: false
+  citizenship: "United States"
+  clearance: "none"                        # "none" | "Public Trust" | "Secret" | "Top Secret" | ...
+  how_did_you_hear_default: "LinkedIn"
+
+education:
+  - degree: "B.S. Computer Science"
+    institution: "State University"
+    grad_year: 2018
+
+# Free-text templates the agent uses as a starting point for essay questions.
+# The Gemini essay prompt will personalize these with scraped company facts.
+# Keep them under ~120 words each.
+essays:
+  why_company_template: |
+    I'm drawn to companies that are shipping AI products into real production
+    workflows rather than chasing benchmarks. {{company}} stands out because…
+    (the agent will fill in based on scraped company facts)
+  why_role_template: |
+    The role hits the part of the stack I most enjoy: …
+  about_me_template: |
+    Engineer with N years building production systems. Recent focus: …
+  proud_project_template: |
+    The one I'd write a postmortem about: …

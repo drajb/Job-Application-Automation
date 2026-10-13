@@ -1,0 +1,27 @@
+# Job-discovery watchlist. Copy to watchlist.yaml (gitignored) and edit.
+#
+#   cp watchlist.example.yaml watchlist.yaml
+#   python -m src.main --scan          # or /scan in Telegram
+#
+# `slug` is the company's board token — the path segment of its careers URL:
+#   boards.greenhouse.io/<slug>   jobs.lever.co/<slug>
+#   jobs.ashbyhq.com/<slug>       jobs.smartrecruiters.com/<slug>
+#
+# Discovery only suggests roles. Nothing is applied to until you pick one.
+
+companies:
+  - { ats: greenhouse, slug: example-company, name: Example Company }
+  - { ats: lever, slug: example-startup }
+  - { ats: ashby, slug: example-labs }
+  # - { ats: smartrecruiters, slug: ExampleCorp }
+
+filters:
+  # Any of these words in the title (case-insensitive). Empty = any title.
+  title_include: [engineer, developer, scientist]
+  title_exclude: [intern, principal, director]
+  # Any of these in the location. Empty = anywhere. Remote roles pass when remote_ok.
+  locations: [New York, San Francisco, United States]
+  remote_ok: true
+  max_age_days: 30    # skip postings older than this (0 = no limit)
+  min_fit: 0.35       # 0..1 — hide weak matches
+  top_n: 10           # how many to show per scan
